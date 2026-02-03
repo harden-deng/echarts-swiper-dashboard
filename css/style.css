@@ -55,10 +55,6 @@ body::before {
     letter-spacing: 2px;
 }
 
-
-
-
-
 /* 每一行 */
 .dashboard-column {
     display: flex;
@@ -424,7 +420,6 @@ body::before {
     display: block;
     animation: fadeInDown 0.3s ease;
 }
-
 @keyframes fadeInDown {
     from {
         opacity: 0;

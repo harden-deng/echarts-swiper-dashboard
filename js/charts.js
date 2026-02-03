@@ -31,11 +31,11 @@ const darkTheme = {
     }
 };
 // 懒加载：记录各页图表是否已初始化
-var chartSlideInited = [false, false, false];
+var chartSlideInited = [false, false, false, false, false, false, false];
 
 // 按页初始化图表（只初始化未初始化的页）
 function loadChartsForSlide(slideIndex) {
-    if (slideIndex < 0 || slideIndex > 2) return;
+    // if (slideIndex < 0 || slideIndex > 2) return;
     if (chartSlideInited[slideIndex]) return;
     if (slideIndex === 0) {
         console.log('初始化第0页图表');
@@ -50,6 +50,25 @@ function loadChartsForSlide(slideIndex) {
         console.log('初始化第2页图表');
         initChart5();
         initChart6();
+    }else if (slideIndex === 3) {
+        console.log('初始化第3页图表');
+        initChart7();
+        initChart8();
+    }
+    else if (slideIndex === 4) {
+        console.log('初始化第4页图表');
+        initChart9();
+        initChart10();
+    }
+    else if (slideIndex === 5) {
+        console.log('初始化第5页图表');
+        initChart11();
+        initChart12();
+    }
+    else if (slideIndex === 6) {
+        console.log('初始化第6页图表');
+        initChart13();
+        initChart14();
     }
     chartSlideInited[slideIndex] = true;
 }
@@ -64,7 +83,7 @@ function preloadNextSlideCharts(currentIndex) {
     }
 }
 // 首屏只初始化第一页图表，其余页懒加载
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     loadChartsForSlide(0); // 仅第一页
     initToggleSwitch();
     initCustomDropdown();
@@ -82,7 +101,7 @@ function initChart() {
 // 图表1：2025年投资情况 - 圆环图
 function initChart1Indicator() {
     const chart = echarts.init(document.getElementById('chart1-indicator'));
-    
+
     const option = {
         tooltip: {
             trigger: 'item',
@@ -119,14 +138,14 @@ function initChart1Indicator() {
                 { value: 25, name: '进行中投资' },
                 { value: 10, name: '计划投资' }
             ],
-            color: ['#4CAF50', '#1E88E5' , '#F44336']
+            color: ['#4CAF50', '#1E88E5', '#F44336']
         }]
     };
-    
+
     chart.setOption(option);
-    
+
     // 响应式
-    window.addEventListener('resize', function() {
+    window.addEventListener('resize', function () {
         chart.resize();
     });
 }
@@ -134,7 +153,7 @@ function initChart1Indicator() {
 // 图表1：2025年投资情况 - 柱状图
 function initChart1Bar() {
     const chart = echarts.init(document.getElementById('chart1-bar'));
-    
+
     const option = {
         backgroundColor: 'transparent',
         grid: {
@@ -209,10 +228,10 @@ function initChart1Bar() {
             }
         }
     };
-    
+
     chart.setOption(option);
-    
-    window.addEventListener('resize', function() {
+
+    window.addEventListener('resize', function () {
         chart.resize();
     });
 }
@@ -221,9 +240,9 @@ function initChart1Bar() {
 function initChart2() {
     const chartElement = document.getElementById('chart2');
     if (!chartElement) return;
-    
+
     const chart = echarts.init(chartElement);
-    
+
     const option = {
         backgroundColor: 'transparent',
         grid: {
@@ -298,10 +317,10 @@ function initChart2() {
             }
         }
     };
-    
+
     chart.setOption(option);
-    
-    window.addEventListener('resize', function() {
+
+    window.addEventListener('resize', function () {
         chart.resize();
     });
 }
@@ -310,9 +329,9 @@ function initChart2() {
 function initChart3() {
     const chartElement = document.getElementById('chart3');
     if (!chartElement) return;
-    
+    chartElement.style.height = '80vh';  // 或使用其他单位：'50vh', '400px' 等
     const chart = echarts.init(chartElement);
-    
+
     const option = {
         backgroundColor: 'transparent',
         grid: {
@@ -396,16 +415,16 @@ function initChart3() {
             textStyle: {
                 color: '#ffffff'
             },
-            formatter: function(params) {
-                return params[0].name + '<br/>' + 
-                       params[0].seriesName + ': ' + params[0].value + '%';
+            formatter: function (params) {
+                return params[0].name + '<br/>' +
+                    params[0].seriesName + ': ' + params[0].value + '%';
             }
         }
     };
-    
+
     chart.setOption(option);
-    
-    window.addEventListener('resize', function() {
+
+    window.addEventListener('resize', function () {
         chart.resize();
     });
 }
@@ -414,9 +433,9 @@ function initChart3() {
 function initChart4() {
     const chartElement = document.getElementById('chart4');
     if (!chartElement) return;
-    
+
     const chart = echarts.init(chartElement);
-    
+
     const option = {
         backgroundColor: 'transparent',
         grid: {
@@ -519,10 +538,10 @@ function initChart4() {
             }
         }
     };
-    
+
     chart.setOption(option);
-    
-    window.addEventListener('resize', function() {
+
+    window.addEventListener('resize', function () {
         chart.resize();
     });
 }
@@ -531,9 +550,9 @@ function initChart4() {
 function initChart5() {
     const chartElement = document.getElementById('chart5');
     if (!chartElement) return;
-    
+
     const chart = echarts.init(chartElement);
-    
+
     const option = {
         backgroundColor: 'transparent',
         grid: {
@@ -607,10 +626,10 @@ function initChart5() {
             }
         }
     };
-    
+
     chart.setOption(option);
-    
-    window.addEventListener('resize', function() {
+
+    window.addEventListener('resize', function () {
         chart.resize();
     });
 }
@@ -619,9 +638,9 @@ function initChart5() {
 function initChart6() {
     const chartElement = document.getElementById('chart6');
     if (!chartElement) return;
-    
+
     const chart = echarts.init(chartElement);
-    
+
     const option = {
         backgroundColor: 'transparent',
         grid: {
@@ -720,10 +739,10 @@ function initChart6() {
             }
         }
     };
-    
+
     chart.setOption(option);
-    
-    window.addEventListener('resize', function() {
+
+    window.addEventListener('resize', function () {
         chart.resize();
     });
 }
@@ -731,32 +750,32 @@ function initChart6() {
 function transformFontSize(px) {
     let clientWidth = window.innerWidth || document.body.clientWidth
     if (!clientWidth) {
-      return 0
+        return 0
     }
     let fontSize = clientWidth / 1920
-    console.log(fontSize,px * fontSize)
+    console.log(fontSize, px * fontSize)
     return px * fontSize
 }
 
 // 初始化切换按钮交互
 function initToggleSwitch() {
     const toggleButtons = document.querySelectorAll('.toggle-btn');
-    
+
     toggleButtons.forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
             // 移除同一组内所有按钮的active类
             const toggleSwitch = this.closest('.toggle-switch');
             toggleSwitch.querySelectorAll('.toggle-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
-            
+
             // 给当前点击的按钮添加active类
             this.classList.add('active');
-         
+
             // 这里可以添加切换数据或图表的逻辑
             const value = this.getAttribute('data-value');
             console.log('切换到:', value);
-               initChart();
+            initChart();
 
         });
     });
@@ -767,18 +786,17 @@ function initToggleSwitch() {
 // 初始化自定义下拉组件
 function initCustomDropdown() {
     const customDropdowns = document.querySelectorAll('.custom-dropdown');
-    
     customDropdowns.forEach(dropdown => {
-        const btn = dropdown.querySelector('.custom-dropdown-btn');
-        const list = dropdown.querySelector('.custom-dropdown-list');
-        const items = dropdown.querySelectorAll('.custom-dropdown-item');
-        const text = dropdown.querySelector('.custom-dropdown-text');
-        
+        const selectBtn = dropdown.querySelector('.custom-dropdown-btn');
+        const typeFlag = selectBtn.getAttribute('type-flag'); // 类型标识
+        const list = dropdown.querySelector('.custom-dropdown-list'); // 选项列表容器
+        const items = list.children; // 选项列表
+        const text = dropdown.querySelector('.custom-dropdown-text'); // 显示文本标签
         // 点击按钮切换下拉列表
-        btn.addEventListener('click', function(e) {
-            e.stopPropagation();
+        selectBtn.addEventListener('click', function (e) {
+            e.stopPropagation(); //阻止事件冒泡，避免点击按钮时触发 document 上的点击监听器
             const isOpen = list.classList.contains('show'); //检查该元素的 classList 中是否存在某个给定的类名
-            
+
             // 关闭所有其他下拉列表
             document.querySelectorAll('.custom-dropdown-list').forEach(l => {
                 if (l !== list) {
@@ -786,53 +804,59 @@ function initCustomDropdown() {
                     l.parentElement.querySelector('.custom-dropdown-btn').classList.remove('active');
                 }
             });
-            
+
             // 切换当前下拉列表
             if (isOpen) {
                 list.classList.remove('show');
-                btn.classList.remove('active');
+                selectBtn.classList.remove('active');
             } else {
                 list.classList.add('show');
-                btn.classList.add('active');
+                selectBtn.classList.add('active');
             }
         });
-        
+
         // 点击选项
-        items.forEach(item => {
-            item.addEventListener('click', function() {
+        for (let j = 0; j < items.length; j++) {
+            const item_j = items[j];
+            item_j.addEventListener('click', function () {
                 const value = this.getAttribute('data-value');
                 const textContent = this.textContent;
-                
+
                 // 更新显示文本
                 text.textContent = textContent;
-                
+
                 // 更新选中状态
-                items.forEach(i => i.classList.remove('selected'));
+                // items.forEach(i => i.classList.remove('selected'));
+                for(let i = 0; i < items.length; i++){
+                    const item_i = items[i];
+                    item_i.classList.remove('selected');
+                }
                 this.classList.add('selected');
-                
-              
-                
+
                 // 关闭下拉列表
                 list.classList.remove('show');
-                btn.classList.remove('active');
-                
+                selectBtn.classList.remove('active');
+
                 // 可以在这里添加切换数据或图表的逻辑
                 console.log('选择:', value);
+                if (typeFlag === '1') {
+                    console.log('执行此语句typeFlag->', typeFlag);
+                }
             });
-        });
-        
+        }
+
         // 点击外部关闭下拉列表
-        document.addEventListener('click', function(e) {
+        document.addEventListener('click', function (e) {
             if (!dropdown.contains(e.target)) {
                 list.classList.remove('show');
-                btn.classList.remove('active');
+                selectBtn.classList.remove('active');
             }
         });
-        
+
         // 初始化显示第一个选项
         const firstSelected = dropdown.querySelector('.custom-dropdown-item.selected');
-        if (firstSelected && select) {
-            select.value = firstSelected.getAttribute('data-value');
+        if (firstSelected && text) {
+            text.textContent = firstSelected.textContent;
         }
     });
 }
@@ -841,9 +865,9 @@ function initCustomDropdown() {
 
 
 
-  //  Swiper 11.0.3 初始化 
-  // 确保 DOM 和 Swiper 都加载完成
-  document.addEventListener('DOMContentLoaded', function() {
+//  Swiper 11.0.3 初始化 
+// 确保 DOM 和 Swiper 都加载完成
+document.addEventListener('DOMContentLoaded', function () {
     // 检查 Swiper 是否已加载
     if (typeof Swiper === 'undefined') {
         console.error('Swiper 未加载！请检查 swiper.min.js 文件');
@@ -858,8 +882,9 @@ function initCustomDropdown() {
         '债务情况',
         '经营情况',
         '本月预算用款情况',
-      ];
-      let dashboardSwiper = new Swiper('.dashboard-swiper', {
+    ];
+
+    let dashboardSwiper = new Swiper('.dashboard-swiper', {
         spaceBetween: 20,
         loop: false,
         navigation: {
@@ -878,7 +903,7 @@ function initCustomDropdown() {
         allowSlidePrev: true,
         allowSlideNext: true,
         on: {
-            init: function() {
+            init: function () {
                 console.log('Swiper 初始化成功');
                 console.log('Slides 数量:', this.slides.length);
                 console.log('当前索引:', this.activeIndex);
@@ -886,7 +911,7 @@ function initCustomDropdown() {
                 // 首屏已是第 0 页，预加载第二页
                 preloadNextSlideCharts(0);
             },
-            slideChange: function() {
+            slideChange: function () {
                 var idx = this.activeIndex;
                 loadChartsForSlide(idx);       // 当前页未加载则加载
                 preloadNextSlideCharts(idx);   // 预加载下一页
@@ -894,9 +919,9 @@ function initCustomDropdown() {
             }
         }
     });
-    
+
     // 添加键盘事件监听器，支持左右箭头键切换
-    document.addEventListener('keydown', function(event) {
+    document.addEventListener('keydown', function (event) {
         // 检查是否在输入框、文本域或下拉菜单中
         const activeElement = document.activeElement;
         const isInputFocused = activeElement && (
@@ -905,12 +930,12 @@ function initCustomDropdown() {
             activeElement.tagName === 'SELECT' ||
             activeElement.isContentEditable
         );
-        
+
         // 如果焦点在输入元素上，不处理键盘事件
         if (isInputFocused) {
             return;
         }
-        
+        console.log('event.key->', event);
         // 左箭头键：上一页
         if (event.key === 'ArrowLeft' || event.keyCode === 37) {
             event.preventDefault();
