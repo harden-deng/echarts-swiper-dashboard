@@ -19,7 +19,7 @@
         <div class="swiper-wrapper">
             <!-- 第一行 -->
             <div class="swiper-slide dashboard-column">
-                <div class="row-left">
+                <div class="row-top" style="height: 50%;overflow-y: auto;">
                     <div class="dashboard-card card-large card-blue">
                         <div class="card-title-wrapper">
                             <div class="card-title">2025年投资情况统计</div>
@@ -34,27 +34,17 @@
                         <div class="card-content">
                             <!-- 左侧：核心指标卡片（圆环图） -->
                             <div class="indicator-card">
-                                <div id="chart1-indicator" class="indicator-chart"></div>
+                                <div id="chart1-indicator"></div>
                             </div>
                             <!-- 右侧：柱状图 -->
                             <div class="chart-area">
-                                <div class="chart-legend">
-                                    <div class="legend-item">
-                                        <span class="legend-bar" style="background-color: #1E88E5;"></span>
-                                        <span>同期比较</span>
-                                    </div>
-                                    <div class="legend-item">
-                                        <span class="legend-bar" style="background-color: #4CAF50;"></span>
-                                        <span>分分</span>
-                                    </div>
-                                </div>
-                                <div id="chart1-bar" class="chart-container"></div>
+                                <div id="chart2-indicator"></div>
                             </div>
                         </div>
-                        <div class="panel-footer"></div>
+                        <div class="panel-footer">1231231231231231</div>
                     </div>
                 </div>
-                <div class="row-right">
+                <div class="row-bottom" style="height: 40%;overflow-y: auto;">
                     <div class="dashboard-card card-blue">
                         <div class="card-title-wrapper">
                             <div class="card-title">2025年投资情况数据</div>
@@ -134,7 +124,7 @@
             </div>
             <!-- 第三行 -->
             <div class="swiper-slide dashboard-column">
-                <div class="row-left">
+                <div class="row-top">
                     <div class="dashboard-card card-large card-blue">
                         <div class="card-title-wrapper">
                             <div class="card-title">资金下达及到位情况统计</div>
@@ -169,7 +159,7 @@
                         <div class="panel-footer"></div>
                     </div>
                 </div>
-                <div class="row-right">
+                <div class="row-bottom">
                     <div class="dashboard-card card-blue">
                         <div class="card-title-wrapper">
                             <div class="card-title">资金下达及到位情况数据</div>
@@ -198,10 +188,271 @@
                     </div>
                 </div>
             </div>
+            <div class="swiper-slide dashboard-column">
+                <div class="row-top">
+                    <div class="dashboard-card card-large card-blue">
+                        <div class="card-title-wrapper">
+                            <div class="card-title">资金下达及到位情况统计</div>
+                            <div class="card-controls">
+                                <!-- 左右切换控件 -->
+                                <div class="toggle-switch">
+                                    <p class="toggle-btn" data-value="last-month">上月实际</p>
+                                    <p class="toggle-btn active" data-value="this-month">本月预算</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <!-- 左侧：核心指标卡片（圆环图） -->
+                            <div class="indicator-card">
+                                <div id="chart1-indicator1" class="indicator-chart"></div>
+                            </div>
+                            <!-- 右侧：柱状图 -->
+                            <div class="chart-area">
+                                <div class="chart-legend">
+                                    <div class="legend-item">
+                                        <span class="legend-bar" style="background-color: #1E88E5;"></span>
+                                        <span>同期比较</span>
+                                    </div>
+                                    <div class="legend-item">
+                                        <span class="legend-bar" style="background-color: #4CAF50;"></span>
+                                        <span>分分</span>
+                                    </div>
+                                </div>
+                                <div id="chart5" class="chart-container"></div>
+                            </div>
+                        </div>
+                        <div class="panel-footer"></div>
+                    </div>
+                </div>
+                <div class="row-bottom">
+                    <div class="dashboard-card card-blue">
+                        <div class="card-title-wrapper">
+                            <div class="card-title">资金下达及到位情况数据</div>
+                            <div class="card-controls">
+                                <!-- 左右切换控件 -->
+                                <div class="toggle-switch">
+                                    <p class="toggle-btn" data-value="last-month">上月实际</p>
+                                    <p class="toggle-btn active" data-value="this-month">本月预算</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <div class="chart-legend">
+                                <div class="legend-item">
+                                    <span class="legend-bar" style="background-color: #FF9800;"></span>
+                                    <span>执行率</span>
+                                </div>
+                                <div class="legend-item">
+                                    <span class="legend-bar" style="background-color: #4CAF50;"></span>
+                                    <span>完成度</span>
+                                </div>
+                            </div>
+                            <div id="chart6" class="chart-container"></div>
+                        </div>
+                        <div class="panel-footer"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-slide dashboard-column">
+                <div class="row-top">
+                    <div class="dashboard-card card-large card-blue">
+                        <div class="card-title-wrapper">
+                            <div class="card-title">资金下达及到位情况统计</div>
+                            <div class="card-controls">
+                                <!-- 左右切换控件 -->
+                                <div class="toggle-switch">
+                                    <p class="toggle-btn" data-value="last-month">上月实际</p>
+                                    <p class="toggle-btn active" data-value="this-month">本月预算</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <!-- 左侧：核心指标卡片（圆环图） -->
+                            <div class="indicator-card">
+                                <div id="chart1-indicator1" class="indicator-chart"></div>
+                            </div>
+                            <!-- 右侧：柱状图 -->
+                            <div class="chart-area">
+                                <div class="chart-legend">
+                                    <div class="legend-item">
+                                        <span class="legend-bar" style="background-color: #1E88E5;"></span>
+                                        <span>同期比较</span>
+                                    </div>
+                                    <div class="legend-item">
+                                        <span class="legend-bar" style="background-color: #4CAF50;"></span>
+                                        <span>分分</span>
+                                    </div>
+                                </div>
+                                <div id="chart5" class="chart-container"></div>
+                            </div>
+                        </div>
+                        <div class="panel-footer"></div>
+                    </div>
+                </div>
+                <div class="row-bottom">
+                    <div class="dashboard-card card-blue">
+                        <div class="card-title-wrapper">
+                            <div class="card-title">资金下达及到位情况数据</div>
+                            <div class="card-controls">
+                                <!-- 左右切换控件 -->
+                                <div class="toggle-switch">
+                                    <p class="toggle-btn" data-value="last-month">上月实际</p>
+                                    <p class="toggle-btn active" data-value="this-month">本月预算</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <div class="chart-legend">
+                                <div class="legend-item">
+                                    <span class="legend-bar" style="background-color: #FF9800;"></span>
+                                    <span>执行率</span>
+                                </div>
+                                <div class="legend-item">
+                                    <span class="legend-bar" style="background-color: #4CAF50;"></span>
+                                    <span>完成度</span>
+                                </div>
+                            </div>
+                            <div id="chart6" class="chart-container"></div>
+                        </div>
+                        <div class="panel-footer"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-slide dashboard-column">
+                <div class="row-top">
+                    <div class="dashboard-card card-large card-blue">
+                        <div class="card-title-wrapper">
+                            <div class="card-title">资金下达及到位情况统计</div>
+                            <div class="card-controls">
+                                <!-- 左右切换控件 -->
+                                <div class="toggle-switch">
+                                    <p class="toggle-btn" data-value="last-month">上月实际</p>
+                                    <p class="toggle-btn active" data-value="this-month">本月预算</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <!-- 左侧：核心指标卡片（圆环图） -->
+                            <div class="indicator-card">
+                                <div id="chart1-indicator1" class="indicator-chart"></div>
+                            </div>
+                            <!-- 右侧：柱状图 -->
+                            <div class="chart-area">
+                                <div class="chart-legend">
+                                    <div class="legend-item">
+                                        <span class="legend-bar" style="background-color: #1E88E5;"></span>
+                                        <span>同期比较</span>
+                                    </div>
+                                    <div class="legend-item">
+                                        <span class="legend-bar" style="background-color: #4CAF50;"></span>
+                                        <span>分分</span>
+                                    </div>
+                                </div>
+                                <div id="chart5" class="chart-container"></div>
+                            </div>
+                        </div>
+                        <div class="panel-footer"></div>
+                    </div>
+                </div>
+                <div class="row-bottom">
+                    <div class="dashboard-card card-blue">
+                        <div class="card-title-wrapper">
+                            <div class="card-title">资金下达及到位情况数据</div>
+                            <div class="card-controls">
+                                <!-- 左右切换控件 -->
+                                <div class="toggle-switch">
+                                    <p class="toggle-btn" data-value="last-month">上月实际</p>
+                                    <p class="toggle-btn active" data-value="this-month">本月预算</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <div class="chart-legend">
+                                <div class="legend-item">
+                                    <span class="legend-bar" style="background-color: #FF9800;"></span>
+                                    <span>执行率</span>
+                                </div>
+                                <div class="legend-item">
+                                    <span class="legend-bar" style="background-color: #4CAF50;"></span>
+                                    <span>完成度</span>
+                                </div>
+                            </div>
+                            <div id="chart6" class="chart-container"></div>
+                        </div>
+                        <div class="panel-footer"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-slide dashboard-column">
+                <div class="row-top">
+                    <div class="dashboard-card card-large card-blue">
+                        <div class="card-title-wrapper">
+                            <div class="card-title">资金下达及到位情况统计</div>
+                            <div class="card-controls">
+                                <!-- 左右切换控件 -->
+                                <div class="toggle-switch">
+                                    <p class="toggle-btn" data-value="last-month">上月实际</p>
+                                    <p class="toggle-btn active" data-value="this-month">本月预算</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <!-- 左侧：核心指标卡片（圆环图） -->
+                            <div class="indicator-card">
+                                <div id="chart1-indicator1" class="indicator-chart"></div>
+                            </div>
+                            <!-- 右侧：柱状图 -->
+                            <div class="chart-area">
+                                <div class="chart-legend">
+                                    <div class="legend-item">
+                                        <span class="legend-bar" style="background-color: #1E88E5;"></span>
+                                        <span>同期比较</span>
+                                    </div>
+                                    <div class="legend-item">
+                                        <span class="legend-bar" style="background-color: #4CAF50;"></span>
+                                        <span>分分</span>
+                                    </div>
+                                </div>
+                                <div id="chart5" class="chart-container"></div>
+                            </div>
+                        </div>
+                        <div class="panel-footer"></div>
+                    </div>
+                </div>
+                <div class="row-bottom">
+                    <div class="dashboard-card card-blue">
+                        <div class="card-title-wrapper">
+                            <div class="card-title">资金下达及到位情况数据</div>
+                            <div class="card-controls">
+                                <!-- 左右切换控件 -->
+                                <div class="toggle-switch">
+                                    <p class="toggle-btn" data-value="last-month">上月实际</p>
+                                    <p class="toggle-btn active" data-value="this-month">本月预算</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <div class="chart-legend">
+                                <div class="legend-item">
+                                    <span class="legend-bar" style="background-color: #FF9800;"></span>
+                                    <span>执行率</span>
+                                </div>
+                                <div class="legend-item">
+                                    <span class="legend-bar" style="background-color: #4CAF50;"></span>
+                                    <span>完成度</span>
+                                </div>
+                            </div>
+                            <div id="chart6" class="chart-container"></div>
+                        </div>
+                        <div class="panel-footer"></div>
+                    </div>
+                </div>
+            </div>
+            
         </div>
         <!-- 导航按钮 - 限定在当前容器内 -->
-        <div class="swiper-button-next swiper-button-white"></div>
-        <div class="swiper-button-prev swiper-button-white"></div>
+        <!-- <div class="swiper-button-next swiper-button-white"></div>
+        <div class="swiper-button-prev swiper-button-white"></div> -->
         <!-- 分页指示器 - 带数字的圆点 -->
         <div class="swiper-pagination dashboard-pagination"></div>
     </div>
@@ -223,7 +474,7 @@
         </div>
     </div>
     <!-- 所有脚本统一放在body底部，按依赖顺序加载 -->
-    <script type="text/javascript" src="js/bg.js"></script>
+    <!-- <script type="text/javascript" src="js/bg.js"></script> -->
     <script src="libs/swiper-bundle.min.js"></script>
     <script src="js/echarts.min.js"></script>
     <script src="js/flexible.js"></script>

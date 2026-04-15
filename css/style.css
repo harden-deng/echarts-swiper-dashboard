@@ -10,7 +10,7 @@ body {
     background: linear-gradient(135deg, #0a1929 0%, #1a2332 100%);
     color: #ffffff;
     min-height: 100vh;
-    padding: 0 20px 20px;
+    padding: 0 0.2rem 0.2rem;
     position: relative;
     overflow-x: hidden;
 }
@@ -23,6 +23,7 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
+ 
     background: 
         linear-gradient(0deg, transparent 24%, rgba(30, 136, 229, 0.05) 25%, rgba(30, 136, 229, 0.05) 26%, transparent 27%, transparent 74%, rgba(30, 136, 229, 0.05) 75%, rgba(30, 136, 229, 0.05) 76%, transparent 77%, transparent),
         linear-gradient(90deg, transparent 24%, rgba(30, 136, 229, 0.05) 25%, rgba(30, 136, 229, 0.05) 26%, transparent 27%, transparent 74%, rgba(30, 136, 229, 0.05) 75%, rgba(30, 136, 229, 0.05) 76%, transparent 77%, transparent);
@@ -62,6 +63,8 @@ body::before {
     gap: 20px;
     width: 100%;
     margin: 0 auto;
+    /* border: 1px solid red; */
+    overflow-y: auto;
 }
 /* 切换为行样式 */
 .column-switch-row {
@@ -73,9 +76,18 @@ body::before {
     display: flex;
 }
 
-/* 行右侧（100%） */
+/* 行右侧 */
 .row-right {
     flex: 1 1 100%;
+    display: flex;
+}
+/* 上层 */
+.row-top {
+    display: flex;
+}
+
+/* 下层（100%） */
+.row-bottom {
     display: flex;
 }
 
@@ -208,9 +220,11 @@ body::before {
 .card-content {
     display: flex;
     gap: 20px;
-    height: 34vh;
+    height: auto;
 }
-
+/* #chart1-indicator{
+    width: 300px !important;
+} */
 /* 核心指标卡片 */
 .indicator-card {
     display: flex;
@@ -220,8 +234,8 @@ body::before {
 }
 
 .indicator-chart {
-    width: 200px;
-    height: 280px;
+    width: 480px;
+    height: 400px;
 }
 
 
@@ -343,8 +357,13 @@ body::before {
 
 /* 图表容器特定样式 */
 #chart1-indicator{
-    width: 200px !important;
-    height: 280px !important;
+    width: 400px !important;
+    height: 300px !important;
+}
+/* 图表容器特定样式 */
+#chart2-indicator{
+    width: 480px !important;
+    height: 300px !important;
 }
 
 .dashboard-card:hover {
@@ -352,7 +371,10 @@ body::before {
     transition: all 0.3s ease;
 }
 
-
+#chart1-bar1{
+    width: 20%;
+    height: 50px;
+}
 
 
 /* 自定义下拉组件样式 */
@@ -458,6 +480,7 @@ body::before {
 /* Swiper 导航按钮样式 */
 .dashboard-swiper .swiper-wrapper {
     display: flex;
+    height: 100%;
 }
 
 .dashboard-swiper .swiper-slide {
@@ -466,7 +489,7 @@ body::before {
     height: auto;
 }
 
-.dashboard-swiper .swiper-button-next,
+/* .dashboard-swiper .swiper-button-next,
 .dashboard-swiper .swiper-button-prev {
     width: 80px;
     height: 80px;
@@ -481,21 +504,20 @@ body::before {
     padding: 10px;
     cursor: pointer;
     z-index: 10;
-    /* 默认隐藏 */
     opacity: 0;
     visibility: hidden;
-    /* 确保即使透明时也能点击 */
+   
     pointer-events: auto;
-}
+} */
 
 /* 鼠标移入轮播容器时显示按钮 */
-.dashboard-swiper:hover .swiper-button-next,
+/* .dashboard-swiper:hover .swiper-button-next,
 .dashboard-swiper:hover .swiper-button-prev {
     opacity: 1;
     visibility: visible;
-}
+} */
 
-.dashboard-swiper .swiper-button-next:hover,
+/* .dashboard-swiper .swiper-button-next:hover,
 .dashboard-swiper .swiper-button-prev:hover {
     background-color: rgba(30, 136, 229, 0.6);
     transform: scale(1.1);
@@ -514,18 +536,19 @@ body::before {
     opacity: 0.3;
     cursor: not-allowed;
     pointer-events: none;
-}
+} */
 
 /* 确保 Swiper 容器有足够的空间，不会被内容遮挡 */
 .dashboard-swiper {
     position: relative;
     z-index: 1;
     width: 100%;
-    height: auto;
+    /* height: auto; */
     overflow: hidden;
     /* 添加左右内边距，为导航按钮留出空间 */
     /* padding: 0 120px; */
     box-sizing: border-box;
+    height: calc(100vh - 1.4rem);
 }
 
 /* 调整 wrapper，确保内容不会与按钮重叠 */
@@ -538,50 +561,62 @@ body::before {
 /* 分页指示器样式 - 带数字的圆点 */
 .dashboard-swiper .swiper-pagination {
     position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 0.18rem;
+    top: 0.4rem;
+    height: 0.27rem;
     width: auto;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10px;
+    gap: 0.001rem;
     z-index: 10;
 }
 
+ /* 基础形态：去掉原本背景，改用伪元素绘制平行四边形 */
 .dashboard-swiper .swiper-pagination-bullet {
+    position: relative;
     width: auto;
-    padding: 0 10px;
-    height: 40px;
+    padding: 0 0.26rem;
+    height: 0.27rem;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     border-radius: 0;
-    background-color: rgba(30, 136, 229, 0.2);
-    /* border: 0.5px solid rgba(255, 255, 255, 0.5); */
+    background-color: transparent;               /* 背景交给 ::before */
     color: #ffffff;
-    font-size: 16px;
-    font-weight: bold;
+    font-size: 0.12rem;
     cursor: pointer;
     transition: all 0.3s;
     opacity: 1;
-    margin: 0 !important;
-    border: 2px solid rgba(210, 213, 216, 0);
+    border: none;
+    z-index: 1;                                  /* 盖在伪元素上面 */
+    margin: 0 0 !important;               /* 左右留一点间距 */
 }
 
-.dashboard-swiper .swiper-pagination-bullet:hover {
-    /* background-color: rgba(30, 136, 229, 0.5); */
-    /* border-color: #02a6b5; */
-    /* border: 0.5px solid #02a6b5; */
-    /* transform: scale(1.1); */
-    /* background-color: rgba(30, 136, 229, 0.6); */
-    border: 2px solid rgba(2, 166, 181, 0.8);
+/* 平行四边形背景：左右各切一个斜角 */
+.dashboard-swiper .swiper-pagination-bullet::before {
+    content: '';
+    position: absolute;
+    inset: 0;                                   /* 占满整个 bullet 区域 */
+    background: rgba(30, 136, 229, 0.2);        /* 默认背景色 */
+    border: 0.01rem solid rgba(0, 255, 255, .4);
+    /* 通过 clip-path 裁剪成“平行四边形/切角矩形”效果 */
+    clip-path: polygon(
+        0.12rem 0,           /* 左上向右偏一点 */
+        100% 0,              /* 右上角 */
+        calc(100% - 0.12rem) 100%, /* 右下向左偏一点 */
+        0.01rem 100%               /* 左下角 */
+    );
+    z-index: -1;
+}
+
+/* 激活态：颜色更亮、边框高亮，接近你截图里的效果 */
+.dashboard-swiper .swiper-pagination-bullet-active::before {
+    border-color: rgba(0, 255, 255, 0.9);
 }
 
 .dashboard-swiper .swiper-pagination-bullet-active {
-    /* border-color: #02a6b5; */
-    color: #ffffff;
-    border: 2px solid rgba(2, 166, 181, 0.8);
-    /* transform: scale(1.15); */
-    /* box-shadow: 0 0 15px rgba(30, 136, 229, 0.6); */
+    color: #00f7ff;
 }
+
+

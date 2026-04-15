@@ -40,7 +40,7 @@ function loadChartsForSlide(slideIndex) {
     if (slideIndex === 0) {
         console.log('初始化第0页图表');
         initChart1Indicator();
-        initChart1Bar();
+        initChart2Indicator();
         initChart2();
     } else if (slideIndex === 1) {
         console.log('初始化第1页图表');
@@ -50,7 +50,7 @@ function loadChartsForSlide(slideIndex) {
         console.log('初始化第2页图表');
         initChart5();
         initChart6();
-    }else if (slideIndex === 3) {
+    } else if (slideIndex === 3) {
         console.log('初始化第3页图表');
         initChart7();
         initChart8();
@@ -71,6 +71,28 @@ function loadChartsForSlide(slideIndex) {
         initChart14();
     }
     chartSlideInited[slideIndex] = true;
+
+
+
+}
+
+
+function initPixelRatioListener(callback) {
+    // 记录原始的像素比
+    let originPixelRatio = window.devicePixelRatio;
+    // 定义当像素比变化时的处理函数
+    let mqListener = function (e) {
+        let currentPixelRatio = window.devicePixelRatio;
+        console.log('页面缩放比例变化了，当前比例：', currentPixelRatio / originPixelRatio);
+        callback(currentPixelRatio / originPixelRatio);
+
+        // 更新监听，以捕获后续变化
+        this.removeEventListener('change', mqListener);
+        matchMedia(`(resolution: ${currentPixelRatio}dppx)`).addEventListener('change', mqListener);
+    };
+
+    // 开始监听
+    matchMedia(`(resolution: ${originPixelRatio}dppx)`).addEventListener('change', mqListener);
 }
 
 // 预加载下一页（在空闲时执行，避免阻塞首屏）
@@ -98,143 +120,386 @@ function initChart() {
     // initChart5();          // 资金下达及到位情况统计 - 柱状图
     // initChart6();          // 资金下达及到位情况数据 - 双轴图表
 }
-// 图表1：2025年投资情况 - 圆环图
+/**
+ * 根据 source 动态计算环图间隙值（用于透明占位扇区）
+ * 思路：
+ * 1) 以最小扇区为锚点，gap 不超过最小值的一定比例（避免小扇区被切太碎）
+ * 2) 用总量比例做下限（避免数据整体很大时 gap 太小看不见）
+ * 3) 最后做 clamp 限幅
+ */
+function calcDynamicGap(source, valueKey, options = {}) {
+    const {
+        minGap = 1.4,        // 提高下限：保证一定看得见
+        maxGap = 4.2,        // 允许更大缝隙
+        minPartRatio = 0.28, // 最小扇区可承受比例提高
+        totalRatio = 0.006,  // 总量比例提高（设计感更强）
+        prefer = 0.72        // 越接近1越偏向 byTotal
+    } = options;
+    const values = source
+        .map(i => Number(i[valueKey]) || 0)
+        .filter(v => v > 0);
+    if (!values.length) return minGap;
+    const minPart = Math.min(...values);
+    const total = values.reduce((s, v) => s + v, 0);
+    const byMinPart = minPart * minPartRatio;
+    const byTotal = total * totalRatio;
+    // 设计稿风格：偏向 byTotal（整体视觉更“有缝”）
+    const raw = byMinPart * (1 - prefer) + byTotal * prefer;
+    return Math.max(minGap, Math.min(maxGap, raw));
+}
+function calcOuterGapDesign(source) {
+    return calcDynamicGap(source, 'budget', {
+        minGap: 1.6,
+        maxGap: 4.5,
+        minPartRatio: 0.30,
+        totalRatio: 0.0065,
+        prefer: 0.75
+    });
+}
+function calcInnerGapDesign(source) {
+    // 内圈略小，避免内圈“碎裂感”过强
+    return calcDynamicGap(source, 'budget', {
+        minGap: 1.6,
+        maxGap: 4.5,
+        minPartRatio: 0.30,
+        totalRatio: 0.0065,
+        prefer: 0.75
+    });
+}
 function initChart1Indicator() {
-    const chart = echarts.init(document.getElementById('chart1-indicator'));
+    const dom = document.getElementById('chart1-indicator');
+    const chart = echarts.init(dom);
+    // 模拟业务数据（可替换）
+    const source = [
+        { name: '建安工程费', budget: 320, issued: 320, color: '#2A84E9' },
+        { name: '工程建设其他费', budget: 190, issued: 170, color: '#36C7C9' },
+        { name: '设备工器具购置费', budget: 140, issued: 120, color: '#10C469' },
+        { name: '预备费', budget: 140, issued: 120, color: '#10C469' },
+        { name: '前期费', budget: 140, issued: 120, color: '#10C469' },
+        { name: '建设期贷款利息', budget: 140, issued: 120, color: '#10C469' },
+    ];
+    const source1 = [
+        {
+            "name": "建安工程费",
+            "budget": 86.977052,
+            "issued": 86.977052,
+            "color": "#2A84E9"
+        },
+        {
+            "name": "工程建设其他费",
+            "budget": 5.269956,
+            "issued": 5.269956,
+            "color": "#36C7C9"
+        },
+        {
+            "name": "设备工器具购置费",
+            "budget": 0,
+            "issued": 0,
+            "color": "#10C469"
+        },
+        {
+            "name": "预备费",
+            "budget": 4.61235,
+            "issued": 4.61235,
+            "color": "#10C439"
+        },
+        {
+            "name": "前期费",
+            "budget": 35.427765,
+            "issued": 35.427765,
+            "color": "#10C369"
+        },
+        {
+            "name": "建设期贷款利息",
+            "budget": 30,
+            "issued": 30,
+            "color": "#10C269"
+        }
+    ]
 
-    const option = {
-        tooltip: {
-            trigger: 'item',
-            formatter: '{a} <br/>{b}: {c}万元 ({d}%)',
-            backgroundColor: 'rgba(26, 35, 50, 0.95)',
-            borderColor: '#1E88E5',
-            textStyle: {
-                color: '#ffffff'
-            },
-            position: function (p) {   //其中p为当前鼠标的位置
-                return [p[0] + 10, p[1] - 10];
+    const totalBudget = source.reduce((s, i) => s + i.budget, 0);
+    // const totalIssued = source.reduce((s, i) => s + i.issued, 0);
+    // 将16进制颜色转换为rgba颜色
+    const hexToRgba = (hex, alpha) => {
+        const h = hex.replace('#', '');
+        const full = h.length === 3 ? h.split('').map(c => c + c).join('') : h;
+        const num = parseInt(full, 16);
+        const r = (num >> 16) & 255;
+        const g = (num >> 8) & 255;
+        const b = num & 255;
+        return `rgba(${r},${g},${b},${alpha})`;
+    };
+
+    // 外圈：pie 按权重 + 透明间隙
+    // const gapValueOuter = 1; // 间隙权重
+    const gapValueOuter = calcOuterGapDesign(source);
+    const outerDataWithGap = [];
+    source.forEach(item => {
+        outerDataWithGap.push({
+            name: item.name,
+            value: item.budget, // 按概算金额权重
+            itemStyle: {
+                color: item.color,
+                borderRadius: 8 // 让每段端点更圆润（pie风格）
             }
-        },
-        legend: {
-            top: '70%',
-            itemWidth: 10,
-            itemHeight: 10,
-            // data: ['已完成投资', '进行中投资', '计划投资'],
-            textStyle: {
-                color: 'rgba(255,255,255,1)',
-                fontSize: '12',
-            }
-        },
-        backgroundColor: 'transparent',
-        series: [{
-            name: '投资情况',
-            type: 'pie',
-            center: ['50%', '42%'],
-            radius: ['40%', '60%'],
+        });
+        outerDataWithGap.push({
+            name: '__gap_outer__',
+            value: gapValueOuter,
+            itemStyle: { color: 'rgba(0,0,0,0)' }, // 透明间隙
             label: { show: false },
             labelLine: { show: false },
-            data: [
-                { value: 65, name: '已完成投资' },
-                { value: 25, name: '进行中投资' },
-                { value: 10, name: '计划投资' }
-            ],
-            color: ['#4CAF50', '#1E88E5', '#F44336']
-        }]
-    };
-
-    chart.setOption(option);
-
-    // 响应式
-    window.addEventListener('resize', function () {
-        chart.resize();
+            tooltip: { show: false },
+            emphasis: { disabled: true }
+        });
     });
-}
+    // 外圈 series
+    const outerPieSeries = {
+        name: '概算金额',
+        type: 'pie', //饼图类型来画环形扇区
+        center: ['66%', '50%'], // 为左侧图例留出空间，整体右移。
+        radius: ['70%', '78%'], // 外圈厚度, 这是环形饼图的内外半径：外半径 70%，内半径 78%。
+        startAngle: 90, // 从 12 点钟方向开始绘制（ECharts 里 90 度对应正上方）。
+        clockwise: true, // 顺时针方向绘制（饼图默认是逆时针）。
+        avoidLabelOverlap: true, //避免标签重叠（虽然你已关闭标签，这里保留也无害）。
+        label: { show: false }, //关闭扇区文字标签，不在图上显示每段名称/数值。
+        labelLine: { show: false }, //关闭标签引导线（因为标签关了，线也不需要）。
+        itemStyle: {
+            borderWidth: 0,
+            borderColor: 'transparent'  //不给每个扇区画描边，避免出现白边/分隔线。
+            // 你现在的“间隙”来源应由 data: outerDataWithGap 里的透明占位扇区来实现，而不是边框。
+        },
+        data: outerDataWithGap  //外圈实际数据源。通常是“真实数据项 + 透明间隙项”交替数组
+    };
+    //外圈---------end---------
 
-// 图表1：2025年投资情况 - 柱状图
-function initChart1Bar() {
-    const chart = echarts.init(document.getElementById('chart1-bar'));
+    //内圈---------start---------
+    // const gapValue = 1; // 建议和外圈 gap 保持一致（比如 gapValueOuter）
+    const gapValue = calcInnerGapDesign(source);
+    const innerDataWithGap = [];
+    source.forEach(item => {
+        const budget = Number(item.budget) || 0;
+        const issuedRaw = Number(item.issued) || 0;
+        // 防御：issued 不允许超过 budget、不小于 0
+        const issued = Math.max(0, Math.min(issuedRaw, budget));
+        const unissued = Math.max(0, budget - issued);
+        // 1) 已发包：半透明显示
+        innerDataWithGap.push({
+            name: item.name,
+            value: issued,
+            itemStyle: { color: hexToRgba(item.color, 0.32) }
+        });
+        let obj = {
+            itemStyle: { color: 'rgba(0,0,0,0)' },
+            label: { show: false },
+            labelLine: { show: false },
+            tooltip: { show: false },
+            emphasis: { disabled: true }
+        }
+        // 2) 未发包：透明占位（让内圈“缺口”出现在分类内部）
+        if (unissued > 0) {
+            innerDataWithGap.push({
+                name: '__unissued__',
+                value: unissued,
+                ...obj
+            });
+        }
+        // 3) 分类间隔：透明缝隙
+        innerDataWithGap.push({
+            name: '__gap__',
+            value: gapValue,
+            ...obj
+        });
+    });
+
+    const innerPie = {
+        name: '累计发包',
+        type: 'pie',
+        center: ['66%', '50%'],
+        radius: ['42%', '68%'],
+        startAngle: 90,
+        clockwise: true,
+        avoidLabelOverlap: true,
+        label: { show: false },
+        labelLine: { show: false },
+        itemStyle: {
+            borderWidth: 0,
+            borderColor: 'transparent'
+        },
+        data: innerDataWithGap
+    };
+    //内圈---------end---------
 
     const option = {
         backgroundColor: 'transparent',
-        grid: {
-            left: '10%',
-            right: '10%',
-            bottom: '15%',
-            top: '10%',
-            containLabel: true
-        },
-        xAxis: {
-            type: 'category',
-            data: ['1月', '2月', '3月', '4月', '5月'],
-            axisLine: {
-                lineStyle: {
-                    color: 'rgba(30, 136, 229, 0.5)'
-                }
-            },
-            axisLabel: {
-                color: '#ffffff',
-                fontSize: transformFontSize(12)
-            }
-        },
-        yAxis: {
-            type: 'value',
-            name: '投资金额(万元)',
-            max: 8000,
-            axisLine: {
-                lineStyle: {
-                    color: 'rgba(30, 136, 229, 0.5)'
-                }
-            },
-            axisLabel: {
-                color: '#ffffff',
-                fontSize: transformFontSize(12)
-            },
-            nameTextStyle: {
-                color: '#ffffff'
-            },
-            splitLine: {
-                lineStyle: {
-                    color: 'rgba(30, 136, 229, 0.1)'
-                }
+        tooltip: {
+            trigger: 'item',
+            backgroundColor: 'rgba(26, 35, 50, 0.95)',
+            borderColor: '#1E88E5',
+            textStyle: { color: '#fff' },
+            formatter: function (p) {
+                if (p.name === '__gap_outer__' || p.name === '__gap__' || p.name === '__unissued__') return '';
+                const row = source.find(x => x.name === p.name);
+                return [
+                    `${p.marker}${p.name}`,
+                    `概算：${row ? row.budget : '-'} 万元`,
+                    `概算占比：${row ? (row.budget / totalBudget * 100).toFixed(2) : '-'}%`,
+                    `发包：${row ? row.issued : '-'} 万元`,
+                    `发包占比：${row ? (row.issued / row.budget * 100).toFixed(2) : '-'}%`
+                ].join('<br/>');
             }
         },
         legend: {
-            show: false
+            left: '4%',
+            top: 'middle',
+            orient: 'vertical',
+            itemWidth: 10,
+            itemHeight: 10,
+            itemGap: 16,
+            textStyle: { color: '#7a8699', fontSize: 12 },
+            data: source.map(i => i.name)
         },
         series: [
+            outerPieSeries,
+            innerPie
+        ],
+        graphic: [
             {
-                name: '同期比较',
-                type: 'bar',
-                data: [4500, 3200, 5500, 4000, 3500],
-                itemStyle: {
-                    color: '#1E88E5'
+                type: 'circle',
+                left: '51.8%',
+                top: '31.1%',
+                shape: { r: 55 },
+                style: {
+                    stroke: '#4aa0ff',
+                    fill: 'transparent',
+                    lineWidth: 3,
+                    lineDash: [2, 3]
                 }
             },
             {
-                name: '分分',
-                type: 'bar',
-                data: [3800, 2800, 4800, 3500, 3000],
-                itemStyle: {
-                    color: '#4CAF50'
+                type: 'text',
+                left: '54%',
+                top: '44%',
+                style: {
+                    text: '采购金额(万元)',
+                    fill: '#333',
+                    fontSize: 14,
+                    fontWeight: 400,
+                    textAlign: 'center'
+                }
+            },
+            {
+                type: 'text',
+                left: '58%',
+                top: '51%',
+                style: {
+                    text: totalBudget.toFixed(2),
+                    fill: '#333',
+                    fontSize: 14,
+                    fontWeight: 600,
+                    textAlign: 'center'
                 }
             }
-        ],
-        tooltip: {
-            trigger: 'axis',
-            backgroundColor: 'rgba(26, 35, 50, 0.95)',
-            borderColor: '#1E88E5',
-            textStyle: {
-                color: '#ffffff'
-            }
-        }
+        ]
     };
 
     chart.setOption(option);
-
+    // 监听窗口大小变化
     window.addEventListener('resize', function () {
         chart.resize();
     });
+    // 监听像素比变化
+    initPixelRatioListener(function () {
+        chart.resize();
+    });
+};
+
+function initChart2Indicator() {
+    const dom = document.getElementById('chart2-indicator');
+    if (!dom) return;
+
+    const chart = echarts.init(dom);
+
+    const source = [
+        { name: '市级全财政', value: 41.56, color: '#2B6F7B' },
+        { name: '区级全财政', value: 37.66, color: '#54A774' },
+        { name: '自营资金', value: 15.58, color: '#69B6D7' },
+        { name: '其他资金', value: 5.19, color: '#BE5468' }
+    ];
+
+    const option = {
+        backgroundColor: 'transparent',
+        color: source.map(i => i.color),
+        tooltip: {
+            trigger: 'item',
+            formatter: '{b}<br/>占比：{d}%'
+        },
+        legend: {
+            left: '4%',
+            top: 'middle',
+            orient: 'vertical',
+            icon: 'roundRect',
+            itemWidth: 10,
+            itemHeight: 10,
+            itemGap: 16,
+            textStyle: {
+                color: '#7a8699',
+                fontSize: 12  
+            },
+            itemStyle: {
+                borderWidth: 0,
+                borderColor: 'transparent'
+            }
+            ,data: source.map(i => i.name)
+        }
+        ,series: [
+            {
+                name: '资金来源',
+                type: 'pie',
+                center: ['48%', '52%'],
+                radius: ['0%', '72%'],
+                minAngle: 3,
+                avoidLabelOverlap: true,
+                label: {
+                    show: true,
+                    position: 'outside',
+                    formatter: '{b} {d}%',
+                   
+                    fontSize: 12
+                },
+                labelLine: {
+                    show: true,
+                    length: 12,
+                    length2: 10,
+                   
+                },
+                itemStyle: {
+                    borderColor: '#ffffff', // 用页面背景色
+                    borderWidth: 1
+                },
+                data: source.map(i => ({ name: i.name, value: i.value, itemStyle: { color: i.color } , label: { color: i.color } , labelLine: {
+                    lineStyle: {
+                        color: i.color
+                    }
+                } })),
+                emphasis: {
+                    scale: false
+                }
+            }
+        ]
+    };
+
+    chart.setOption(option);
+    // 监听窗口大小变化
+    window.addEventListener('resize', function () {
+        chart.resize();
+    });
+    // 监听像素比变化
+    initPixelRatioListener(function () {
+        chart.resize();
+    });
 }
+
 
 // 图表2：资金下达及到位情况 - 柱状图
 function initChart2() {
@@ -321,7 +586,9 @@ function initChart2() {
     chart.setOption(option);
 
     window.addEventListener('resize', function () {
-        chart.resize();
+        setTimeout(() => {
+            chart.resize();
+        }, 300);
     });
 }
 
@@ -425,7 +692,9 @@ function initChart3() {
     chart.setOption(option);
 
     window.addEventListener('resize', function () {
-        chart.resize();
+        setTimeout(() => {
+            chart.resize();
+        }, 300);
     });
 }
 
@@ -542,7 +811,9 @@ function initChart4() {
     chart.setOption(option);
 
     window.addEventListener('resize', function () {
-        chart.resize();
+        setTimeout(() => {
+            chart.resize();
+        }, 300);
     });
 }
 
@@ -630,7 +901,9 @@ function initChart5() {
     chart.setOption(option);
 
     window.addEventListener('resize', function () {
-        chart.resize();
+        setTimeout(() => {
+            chart.resize();
+        }, 300);
     });
 }
 
@@ -743,7 +1016,9 @@ function initChart6() {
     chart.setOption(option);
 
     window.addEventListener('resize', function () {
-        chart.resize();
+        setTimeout(() => {
+            chart.resize();
+        }, 300);
     });
 }
 
@@ -827,7 +1102,7 @@ function initCustomDropdown() {
 
                 // 更新选中状态
                 // items.forEach(i => i.classList.remove('selected'));
-                for(let i = 0; i < items.length; i++){
+                for (let i = 0; i < items.length; i++) {
                     const item_i = items[i];
                     item_i.classList.remove('selected');
                 }
@@ -875,13 +1150,13 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     const arrTitle = [
-        '2025年投资情况',
-        '总体执行情况',
-        '资金下达及到位情况',
-        '上月实际投资支出',
+        '投资情况',
+        '执行情况',
+        '资金情况',
         '债务情况',
+        '上月实际支出情况',
         '经营情况',
-        '本月预算用款情况',
+        '本月预算情况',
     ];
 
     let dashboardSwiper = new Swiper('.dashboard-swiper', {
